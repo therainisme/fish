@@ -1,4 +1,4 @@
-package function
+package petpet
 
 import (
 	"github.com/dlclark/regexp2"

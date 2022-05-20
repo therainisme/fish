@@ -2,7 +2,7 @@ package receiver
 
 import (
 	"encoding/json"
-	"fish/function"
+	"fish/function/petpet"
 	"fish/model"
 	"github.com/gin-gonic/gin"
 	"io"
@@ -12,7 +12,7 @@ import (
 func Listen(addr string) {
 	r := gin.Default()
 	r.POST("/", dispatch)
-	r.GET("/avatar", function.GetAvatar)
+	r.GET("/avatar", petpet.GetAvatar)
 	r.Run(addr)
 }
 
@@ -27,7 +27,7 @@ func dispatch(ctx *gin.Context) {
 
 	switch postEvent.PostType {
 	case "message":
-		function.Petpet(postEvent)
+		petpet.Petpet(postEvent)
 	default:
 		// todo default
 	}
