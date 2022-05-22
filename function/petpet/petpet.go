@@ -1,6 +1,7 @@
 package petpet
 
 import (
+	"fish/config"
 	"fish/mirai"
 	"fish/model"
 	"fmt"
@@ -15,7 +16,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var server = "http://10.1.1.1:5701"
 var reg = regexp2.MustCompile(`(?<=\[CQ:at,qq=)\d*(?=\]\s\u6478)`, 0)
 
 func Petpet(event model.PostEvent) {
@@ -29,7 +29,7 @@ func Petpet(event model.PostEvent) {
 	qq := m.Groups()[0].Captures[0].String()
 	writeQQAvatarToDisk(qq)
 	log.Printf("[Touched Event] user %s touch %s\n", event.Sender.Nickname, qq)
-	msg := fmt.Sprintf("[CQ:image,file=%s,subtype=0]", server+"/avatar?qq="+qq)
+	msg := fmt.Sprintf("[CQ:image,file=%s,subtype=0]", *config.FishAddress+"/avatar?qq="+qq)
 	mirai.SendToGroup(msg, event.GroupID)
 }
 
@@ -89,13 +89,13 @@ func writeQQAvatarToDisk(qq string) {
 	if err != nil {
 		fmt.Println("create pipe err", err.Error())
 	}
-	defer stdout.Close() // 保证关闭输出流
+	defer stdout.Close()
 
-	if err := cmd.Start(); err != nil { // 运行命令
+	if err := cmd.Start(); err != nil {
 		fmt.Println("petpet exec err", err.Error())
 	}
 
-	if _, err := ioutil.ReadAll(stdout); err != nil { // 读取输出结果
+	if _, err := ioutil.ReadAll(stdout); err != nil {
 		fmt.Println("petpet err", err.Error())
 	}
 

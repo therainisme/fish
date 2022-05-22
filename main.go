@@ -1,7 +1,10 @@
 package main
 
-import "fish/receiver"
+import (
+	"fish/config"
+	"fish/receiver"
+)
 
 func main() {
-	receiver.Listen(":5701")
+	receiver.Listen(":" + *config.FishPort)
 }
