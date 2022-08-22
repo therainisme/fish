@@ -4,13 +4,20 @@ import (
 	"encoding/json"
 	"fish/function/petpet"
 	"fish/model"
-	"github.com/gin-gonic/gin"
 	"io"
 	"log"
+
+	"github.com/gin-gonic/gin"
 )
 
 func Listen(addr string) {
-	r := gin.Default()
+
+	r := gin.New()
+	r.Use(gin.LoggerWithConfig(gin.LoggerConfig{
+		SkipPaths: []string{"/"},
+	}))
+	r.Use(gin.Recovery())
+
 	r.POST("/", dispatch)
 	r.GET("/avatar", petpet.GetAvatar)
 	r.Run(addr)
